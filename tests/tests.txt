@@ -1,0 +1,26 @@
+//getusers
+curl -i http://localhost:5000/tsadk/api/v1/users
+
+//ok
+curl -i -H "Content-Type: application/json" -X POST -d '{"email":"c1@lol.co.uk","firstName":"c1","lastName":"lol"}' http://localhost:5000/tsadk/api/v1/users
+
+//not json object
+curl -i -H "Content-Type: application/json" -X POST -d '{"email":"c1@lol.co.uk","firstName":"c1","lastName"}' http://localhost:5000/tsadk/api/v1/users
+
+//missing required fields
+curl -i -H "Content-Type: application/json" -X POST -d '{"firstName":"c1","lastName":"lol"}' http://localhost:5000/tsadk/api/v1/users
+
+//incorrect key syntax
+curl -i -H "Content-Type: application/json" -X POST -d '{"EMAIL":"c1@lol.co.uk","firstName":"c1","lastName":"lol"}' http://localhost:5000/tsadk/api/v1/users
+
+//not right email 1
+curl -i -H "Content-Type: application/json" -X POST -d '{"email":"c1@lolcom","firstName":"c1","lastName":"lol"}' http://localhost:5000/tsadk/api/v1/users
+
+//not right email 2
+curl -i -H "Content-Type: application/json" -X POST -d '{"email":"c1@..","firstName":"c1","lastName":"lol"}' http://localhost:5000/tsadk/api/v1/users
+
+//not right email 3
+curl -i -H "Content-Type: application/json" -X POST -d '{"email":"..@lol.com","firstName":"c1","lastName":"lol"}' http://localhost:5000/tsadk/api/v1/users
+
+//wront name len (must be >=2)
+curl -i -H "Content-Type: application/json" -X POST -d '{"email":"c1@lol.co.uk","firstName":"c","lastName":"lo"}' http://localhost:5000/tsadk/api/v1/users
