@@ -19,14 +19,6 @@ users = [
         "email": "first@example.com",
         "firstName": "John",
         "lastName": "Doe",
-        "logs": [
-            {
-                "id": 0,
-                "timestamp": "17-05-2024 10:17:00",
-                "nomSalle": "Doria",
-                "action": "Walk",
-            }
-        ],
     }
 ]
 logs = [
@@ -107,47 +99,27 @@ def create_user():
 
 
 # logs
-@app.route('/tsadk/api/v1/users/<int:user_id>/logs', methods=['GET'])
+@app.route('/tsadk/api/v1/logs', methods=['GET'])
 @auth.login_required
-def get_logs(user_id):
-    user = [user for user in users if user['id'] == user_id]
-    logs = user[0].get("logs")
-    if len(user) == 0 or len(logs) == 0:
-        abort(404)
-    logs = user[0].get("logs")
-    # if len(logs) == 0:
-    #     abort(404)
-    return jsonify({'logs': [make_public_log(user, log) for log in logs]})
+def get_logs():
+    return jsonify({'logs': [make_public_log(log) for log in logs]})
 
 
-@app.route('/tsadk/api/v1/users/<int:user_id>/logs/<int:log_id>', methods=['GET'])
+@app.route('/tsadk/api/v1/logs/<int:log_id>', methods=['GET'])
 @auth.login_required
-def get_log(user_id, log_id):
-    user = [user for user in users if user['id'] == user_id]
-    logs = user[0].get("logs")
+def get_log(log_id):
     log = [log for log in logs if log['id'] == log_id]
-    if len(user) == 0 or len(logs) == 0 or len(log) == 0:
+    if len(log) == 0:
         abort(404)
     return jsonify({'log': log[0]})
 
 
-@app.route('/tsadk/api/v1/users/<int:user_id>/logs', methods=['POST'])
+@app.route('/tsadk/api/v1/logs', methods=['POST'])
 @auth.login_required
-def create_log(user_id):
-    user = [user for user in users if user['id'] == user_id]
-    logs = user[0].get("logs")
-    if len(user) == 0 or len(logs) == 0:
-        abort(404)
+def create_log():
     if not request.json:
         abort(400, description=ERR_JSON)
-    # if len(request.json) != 3:
-    #     abort(400, description=ERR_USERS_NFIELD)
-    # if len(request.json) == 3 and not ('email' or 'firstName' or 'lastName') in request.json:
-    #     abort(400, description=ERR_USERS_KEYSYNTAX)
-    # if not re.match(r"([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+", request.json['email']):
-    #     abort(400, description=ERR_USERS_EMAILSYNTAX)
-    # if len(request.json['firstName']) < 2 or len(request.json['lastName']) < 2:
-    #     abort(400, description=ERR_USERS_NAMELEN)
+    # TO SEE WITH MARIEM
     log = {
         'id': logs[-1]['id'] + 1,
         'timestamp': request.json['timestamp'],
