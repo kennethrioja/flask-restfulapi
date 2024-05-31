@@ -40,9 +40,14 @@ def create_log():
     # TO SEE WITH MARIEM
     log = {
         'id': logs[-1]['id'] + 1,
+        'joueur': request.json['joueur'],
         'timestamp': request.json['timestamp'],
+        'sequence': request.json['sequence'],
         'nomSalle': request.json['nomSalle'],
         'action': request.json['action'],
+        'reponseJoueur': request.json['reponseJoueur'],
+        'typeAction': request.json['typeAction'],
+        'erreurJoueur': request.json['erreurJoueur'],
     }
     logs.append(log)
     return jsonify({"log": log}), 201

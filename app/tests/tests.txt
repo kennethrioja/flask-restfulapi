@@ -38,3 +38,23 @@ curl -u user1:pwd1 -i http://localhost:5000/tsadk/api/v1/logs/1
 
 // create_log
 curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"timestamp":"17-05-2024 11:14:00","nomSalle":"Cyclea","action":"Bend"}' http://localhost:5000/tsadk/api/v1/logs
+
+// miss reponse joueur
+curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"joueur": 26051990,
+    "timestamp": "2023-04-18T10:19.279Z",
+    "sequence": 10,
+    "nomSalle": "",
+    "action": "déconnexion",
+    "typeAction": "systeme",
+    "erreurJoueur": ""}' http://localhost:5000/tsadk/api/v1/logs
+
+// OK
+curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"joueur": 26051990,"timestamp": "2023-04-18T10:19.279Z","sequence": 10,"nomSalle": "","action": "déconnexion","reponseJoueur":"","typeAction": "systeme","erreurJoueur": ""}' http://localhost:5000/tsadk/api/v1/logs
+
+curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"joueur": 26051990,
+    "timestamp": "2023-04-18T10:17.109Z",
+    "sequence": 9,
+    "nomSalle": "salleForet",
+    "action": "mettre_main",
+    "typeAction": "regionDeposer",
+    "erreurJoueur": "incorrect"}' http://localhost:5000/tsadk/api/v1/logs

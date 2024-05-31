@@ -1,5 +1,5 @@
 from flask import abort, jsonify, request, url_for
-from app import auth, users
+from app import auth, users, logs
 from app.api import bp
 from app import ERR_JSON, ERR_USERS_EMAILSYNTAX, ERR_USERS_KEYSYNTAX, ERR_USERS_NAMELEN, ERR_USERS_NFIELD
 import re
@@ -10,9 +10,8 @@ def make_public_user(user):
     """When GET request, sends back the whole path of the user_id"""
     new_user = {}
     for field in user:
-        if field == 'id':
-            new_user['uri'] = url_for('api.get_user', user_id=user['id'],
-                                      _external=True)
+        if field == 'joueur':
+            new_user['uri'] = url_for('api.get_user', user_id=user['joueur'], _external=True)
         else:
             new_user[field] = user[field]
     return new_user
@@ -28,7 +27,7 @@ def get_users():
 @bp.route('/v1/users/<int:user_id>', methods=['GET'])
 @auth.login_required
 def get_user(user_id):
-    user = [user for user in users if user['id'] == user_id]
+    user = [user for user in users if user['joueur'] == user_id]
     if len(user) == 0:
         abort(404)
     return jsonify({'user': user[0]})
@@ -41,16 +40,14 @@ def create_user():
         abort(400, description=ERR_JSON)
     if len(request.json) != 3:
         abort(400, description=ERR_USERS_NFIELD)
-    if len(request.json) == 3 and not ('email' or 'firstName' or 'lastName')\
-            in request.json:
+    if len(request.json) == 3 and not ('email' or 'firstName' or 'lastName') in request.json:
         abort(400, description=ERR_USERS_KEYSYNTAX)
-    if not re.match(r"([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+\
-                    @[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+", request.json['email']):
+    if not re.match(r"([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+", request.json['email']):
         abort(400, description=ERR_USERS_EMAILSYNTAX)
     if len(request.json['firstName']) < 2 or len(request.json['lastName']) < 2:
         abort(400, description=ERR_USERS_NAMELEN)
     user = {
-        'id': users[-1]['id'] + 1,
+        'joueur': users[-1]['joueur'] + 1,
         'email': request.json['email'],
         'firstName': request.json['firstName'],
         'lastName': request.json['lastName'],
