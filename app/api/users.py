@@ -1,8 +1,9 @@
 from flask import abort, jsonify, request, url_for
-from app import auth, users, logs
+from app import auth, db
 from app.api import bp
-from app import ERR_JSON, ERR_USERS_EMAILSYNTAX, ERR_USERS_KEYSYNTAX, ERR_USERS_NAMELEN, ERR_USERS_NFIELD
-import re
+from app.api.models import User
+from app.api.errors import ERR_JSON, ERR_USERS_KEYSYNTAX, ERR_USERS_NAMELEN, ERR_USERS_NFIELD
+import os
 
 
 # UTILS
@@ -21,39 +22,48 @@ def make_public_user(user):
 @bp.route('/v1/users', methods=['GET'])
 @auth.login_required
 def get_users():
-    return jsonify({'users': [make_public_user(user) for user in users]})
+    users = User.query.all()
+    users_list = [{'uri': url_for('api.get_user', user_id=user.id, _external=True), 'username': user.username, 'pwd': user.pwd} for user in users]
+    return jsonify(users_list)
 
 
 @bp.route('/v1/users/<int:user_id>', methods=['GET'])
 @auth.login_required
 def get_user(user_id):
-    user = [user for user in users if user['joueur'] == user_id]
-    if len(user) == 0:
+    user = User.query.get(user_id)
+    if user is None:
         abort(404)
-    return jsonify({'user': user[0]})
+    user_data = {'id': user.id, 'username': user.username, 'pwd': user.pwd}
+    return jsonify(user_data)
 
 
 @bp.route('/v1/users', methods=['POST'])
 @auth.login_required
 def create_user():
+
+    username = request.json['username']
+    pwd = request.json['pwd']
+
+    # ERROR HANDLING
     if not request.json:
         abort(400, description=ERR_JSON)
-    if len(request.json) != 3:
+    if len(request.json) != 2:
         abort(400, description=ERR_USERS_NFIELD)
-    if len(request.json) == 3 and not ('email' or 'firstName' or 'lastName') in request.json:
+    if len(request.json) == 2 and not ('username' or 'pwd') in request.json:
         abort(400, description=ERR_USERS_KEYSYNTAX)
-    if not re.match(r"([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+", request.json['email']):
-        abort(400, description=ERR_USERS_EMAILSYNTAX)
-    if len(request.json['firstName']) < 2 or len(request.json['lastName']) < 2:
+    if len(request.json['username']) < 2:
         abort(400, description=ERR_USERS_NAMELEN)
-    user = {
-        'joueur': users[-1]['joueur'] + 1,
-        'email': request.json['email'],
-        'firstName': request.json['firstName'],
-        'lastName': request.json['lastName'],
-    }
-    users.append(user)
-    return jsonify({"user": user}), 201
+    # if User.query.filter_by(username=username).first() is not None:
+    #     abort(400, description="User with this username already exists")
+    # if not re.match(r"([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+", request.json['email']):
+    #     abort(400, description=ERR_USERS_EMAILSYNTAX)
+
+    # DB
+    new_user = User(username=username, pwd=pwd)
+    db.session.add(new_user)
+    db.session.commit()
+
+    return jsonify({'id': new_user.id, 'username': new_user.username, 'pwd': new_user.pwd}), 201
 
 
 # AUTH
@@ -63,6 +73,6 @@ def get_password(username):
     In a more complex system this fun could check a user db
     TODO: DO NOT KEEP PWD HERE, add it in .env
     """
-    if username == 'user1':
-        return 'pwd1'
+    if username == os.environ.get("CLI_ID"):
+        return os.environ.get("CLI_PWD")
     return None

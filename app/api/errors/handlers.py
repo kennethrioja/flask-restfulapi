@@ -1,5 +1,5 @@
 from flask import jsonify, make_response
-from app.errors import bp
+from app.api.errors import bp
 from app import auth
 
 

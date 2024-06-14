@@ -1,9 +1,7 @@
 // USERS
-//getusers
-curl -u user1:pwd1 -i http://localhost:5000/tsadk/api/v1/users
 
 //not auth
-curl -i http://localhost:5000/tsadk/api/v1/users
+curl -u user:pwd -i http://localhost:5000/tsadk/api/v1/users
 
 //ok
 curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"email":"c1@lol.co.uk","firstName":"c1","lastName":"lol"}' http://localhost:5000/tsadk/api/v1/users
@@ -48,8 +46,11 @@ curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"joueur":
     "typeAction": "systeme",
     "erreurJoueur": ""}' http://localhost:5000/tsadk/api/v1/logs
 
-// OK
+// OK with timestamp
 curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"joueur": 26051990,"timestamp": "2023-04-18T10:19.279Z","sequence": 10,"nomSalle": "","action": "déconnexion","reponseJoueur":"","typeAction": "systeme","erreurJoueur": ""}' http://localhost:5000/tsadk/api/v1/logs
+
+// OK no timestamp
+curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"joueur": 26051990,"sequence": 10,"nomSalle": "","action": "déconnexion","reponseJoueur":"","typeAction": "systeme","erreurJoueur": ""}' http://localhost:5000/tsadk/api/v1/logs
 
 curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"joueur": 26051990,
     "timestamp": "2023-04-18T10:17.109Z",
@@ -58,3 +59,36 @@ curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"joueur":
     "action": "mettre_main",
     "typeAction": "regionDeposer",
     "erreurJoueur": "incorrect"}' http://localhost:5000/tsadk/api/v1/logs
+
+//OK only sequence
+curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"joueur": 1,"action": "déconnexion"}' http://localhost:5000/tsadk/api/v1/logs
+
+--------------------------------------
+# POST users
+curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"username": "john","pwd": "johnpwd"}' http://localhost:5000/tsadk/api/v1/users
+
+# GET users
+curl -u user1:pwd1 -i http://localhost:5000/tsadk/api/v1/users
+
+
+
+# flask shell
+from app import db
+from app.api.models import User, Log
+import sqlalchemy as sa
+queryUser = sa.select(User)
+users = db.session.scalars(queryUser)
+app.app_context().push()
+
+# print
+for u in users:
+	print(u.id, u.username)
+
+# search
+for u in users:
+
+# len db
+len(db.session.scalars(queryUser).all())	
+
+# clear (does not make sense)
+db.session.scalars(query).all().clear()
