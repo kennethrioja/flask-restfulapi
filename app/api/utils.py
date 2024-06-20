@@ -3,11 +3,11 @@ from app.api import bp
 from app.api.models import Log
 import csv
 from io import StringIO
-from flask import make_response
+from flask import make_response, jsonify
 from datetime import date
 
 
-@bp.route('/v1/export/logs', methods=['GET'])
+@bp.route("/v1/utils/export/logs", methods=["GET"])
 @auth.login_required
 def export_logs():
     si = StringIO()
@@ -18,6 +18,12 @@ def export_logs():
     cw.writerows([(r.id, r.userID, r.timestamp) for r in records])
     response = make_response(si.getvalue())
     today = str(date.today()).replace('-', '')
-    response.headers['Content-Disposition'] = f'attachment; filename=tsadk_export_logs_{today}.csv'
+    response.headers["Content-Disposition"] = f"attachment; filename=tsadk_export_logs_{today}.csv"
     response.headers["Content-type"] = "text/csv"
     return response
+
+
+@bp.route("/v1/utils/token", methods=["GET"])
+@auth.login_required
+def get_token():
+    return jsonify({"token": "Here is the token"})

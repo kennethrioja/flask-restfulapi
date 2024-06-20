@@ -1,9 +1,10 @@
 from flask import Blueprint
 
-bp = Blueprint('errors', __name__)
+bp = Blueprint("errors", __name__)
 
 ERR_JSON = "Not a json object"
 ERR_USERS_NFIELD = "Users - Missing required fields (username, pwd)"
+ERR_USERS_DUPLICATE = "Users - This username already exists, please choose another one"
 ERR_USERS_KEYSYNTAX = "Users - Incorrect key syntax (username, pwd)"
 ERR_USERS_EMAILSYNTAX = "Users - Incorrect email syntax"
 ERR_USERS_NAMELEN = "Users - username must be at least 2 characters long"

@@ -71,11 +71,16 @@ curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"username
 curl -u user1:pwd1 -i http://localhost:5000/tsadk/api/v1/users
 
 # POST logs
-curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"userID": "1","timestamp": "001"}' http://localhost:5000/tsadk/api/v1/logs
+curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"userID": "10","timestamp": "010"}' http://localhost:5000/tsadk/api/v1/logs
 
 # GET logs
 curl -u user1:pwd1 -i http://localhost:5000/tsadk/api/v1/logs
 
+# GET report_logs
+curl -u user1:pwd1 -i http://localhost:5000/tsadk/api/v1/utils/export/logs
+
+# GET token
+curl -u john:johnpwd -i http://localhost:5000/tsadk/api/v1/utils/token
 
 # flask shell
 from app import db
