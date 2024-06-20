@@ -1,14 +1,15 @@
-from datetime import datetime, timezone
 from typing import Optional
+from app import db
+from passlib.apps import custom_app_context as pwd_context
 import sqlalchemy as sa
 import sqlalchemy.orm as so
-from app import db
 
 
 class User(db.Model):
+    __tablename__ = "users"
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
     username: so.Mapped[str] = so.mapped_column(sa.String(64), index=True)
-    pwd: so.Mapped[str] = so.mapped_column(sa.String(128))
+    pwd_hash: so.Mapped[str] = so.mapped_column(sa.String(128))
     # email: so.Mapped[str] = so.mapped_column(sa.String(120), index=True,
     #                                          unique=True)
 
@@ -17,8 +18,15 @@ class User(db.Model):
     def __repr__(self):
         return "<User {}>".format(self.id)
 
+    def hash_password(self, pwd):
+        self.pwd_hash = pwd_context.encrypt(pwd)
+
+    def verify_password(self, pwd):
+        return pwd_context.verify(pwd, self.pwd_hash)
+
 
 class Log(db.Model):
+    __tablename__ = "logs"
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
     userID: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id),
                                               index=True)

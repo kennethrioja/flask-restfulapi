@@ -3,7 +3,7 @@ import sqlite3
 
 # load_dotenv()
 basedir = os.path.abspath(os.path.dirname(__file__))
-connection = sqlite3.connect('cache.db', timeout=10)
+connection = sqlite3.connect("cache.db", timeout=10)
 
 
 class Config:

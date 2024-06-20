@@ -1,6 +1,5 @@
 from flask import jsonify, make_response
 from app.api.errors import bp
-from app import auth
 
 
 # APP
@@ -14,9 +13,3 @@ def bad_request(e):
 @bp.app_errorhandler(404)
 def not_found(e):
     return make_response(jsonify({"error": "Not Found"}), 404)
-
-
-# AUTH
-@auth.error_handler
-def unauthorized():
-    return make_response(jsonify({"error": "Unauthorized access"}), 401)
