@@ -12,7 +12,7 @@ def make_public_user(user):
     new_user = {}
     for field in user:
         if field == 'joueur':
-            new_user['uri'] = url_for('api.get_user', user_id=user['joueur'], _external=True)
+            new_user['uri'] = url_for('api.get_user', user_id=user['username'], _external=True)
         else:
             new_user[field] = user[field]
     return new_user
