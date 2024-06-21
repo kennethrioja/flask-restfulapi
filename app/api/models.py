@@ -1,6 +1,8 @@
 from typing import Optional
 from app import db
 from passlib.apps import custom_app_context as pwd_context
+from config import Config
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 
@@ -10,6 +12,8 @@ class User(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
     username: so.Mapped[str] = so.mapped_column(sa.String(64), index=True)
     pwd_hash: so.Mapped[str] = so.mapped_column(sa.String(128))
+    role: so.Mapped[str] = so.mapped_column(sa.String(32),
+                                            default=lambda: "user")
     # email: so.Mapped[str] = so.mapped_column(sa.String(120), index=True,
     #                                          unique=True)
 
@@ -23,6 +27,22 @@ class User(db.Model):
 
     def verify_password(self, pwd):
         return pwd_context.verify(pwd, self.pwd_hash)
+
+    def generate_auth_token(self, expiration=Config.TOKEN_EXPIRATION_SEC):
+        s = Serializer(Config.SECRET_KEY, expires_in=expiration)
+        return s.dumps({"id": self.id})
+
+    @staticmethod
+    def verify_auth_token(token):
+        s = Serializer(Config.SECRET_KEY)
+        try:
+            data = s.loads(token)
+        except SignatureExpired:
+            return None  # valid token, but expired
+        except BadSignature:
+            return None  # invalid token
+        user = User.query.get(data["id"])
+        return user
 
 
 class Log(db.Model):
