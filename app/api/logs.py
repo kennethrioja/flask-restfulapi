@@ -3,6 +3,7 @@ from app import auth, db
 from app.api import bp
 from app.api.models import Log, User
 from app.api.errors import ERR_JSON, ERR_LOGS_KEYSYNTAX, ERR_LOGS_NFIELD, ERR_LOGS_INVALIDUSERID
+from .auth.decorators import check_access#, token_or_basic_auth_required
 
 
 # UTILS
@@ -21,6 +22,7 @@ def make_public_log(log):
 # ROUTES
 @bp.route("/v1/logs", methods=["GET"])
 @auth.login_required
+@check_access(allowed_roles=["admin"])
 def get_logs():
     logs = Log.query.all()
     logs_list = [{"uri": url_for("api.get_log", log_id=log.id, _external=True), "userID": log.userID, "timestamp": log.timestamp} for log in logs]
@@ -29,6 +31,7 @@ def get_logs():
 
 @bp.route("/v1/logs/<int:log_id>", methods=["GET"])
 @auth.login_required
+@check_access(allowed_roles=["admin"])
 def get_log(log_id):
     log = Log.query.get(log_id)
     if log is None:
@@ -38,6 +41,8 @@ def get_log(log_id):
 
 @bp.route("/v1/logs", methods=["POST"])
 @auth.login_required
+@check_access(allowed_roles=["admin"])
+# @token_or_basic_auth_required
 def create_log():
 
     userID = request.json["userID"]

@@ -3,6 +3,7 @@ from app import auth, db
 from app.api import bp
 from app.api.models import User
 from app.api.errors import ERR_JSON, ERR_USERS_DUPLICATE, ERR_USERS_KEYSYNTAX, ERR_USERS_NAMELEN, ERR_USERS_NFIELD
+from .auth.decorators import check_access
 
 
 # UTILS
@@ -20,6 +21,7 @@ def make_public_user(user):
 # ROUTES
 @bp.route("/v1/users", methods=["GET"])
 @auth.login_required
+@check_access(allowed_roles=["admin"])
 def get_users():
     users = User.query.all()
     users_list = [{"uri": url_for("api.get_user", user_id=user.id, _external=True), "username": user.username} for user in users]
@@ -28,6 +30,7 @@ def get_users():
 
 @bp.route("/v1/users/<int:user_id>", methods=["GET"])
 @auth.login_required
+@check_access(allowed_roles=["admin"])
 def get_user(user_id):
     user = User.query.get(user_id)
     if user is None:
@@ -38,6 +41,7 @@ def get_user(user_id):
 
 @bp.route("/v1/users", methods=["POST"])
 @auth.login_required
+@check_access(allowed_roles=["admin"])
 def create_user():
 
     username = request.json["username"]

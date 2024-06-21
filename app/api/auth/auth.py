@@ -10,12 +10,14 @@ def unauthorized():
 
 
 @auth.verify_password
-def verify_password(username, password):
-    if username == os.environ.get("CLI_ID") and password == os.environ.get("CLI_PWD"):  # admin auth
+def verify_password(username_or_token, password):
+    if username_or_token == os.environ.get("CLI_ID") and password == os.environ.get("CLI_PWD"):  # admin auth
         return True
-    user = User.query.filter_by(username=username).first()
-    if not user or not user.verify_password(password):  # user auth
-        return False
+    user = User.verify_auth_token(username_or_token)  # first try to authenticate by token
+    if not user:
+        user = User.query.filter_by(username=username_or_token).first()
+        if not user or not user.verify_password(password):  # user auth
+            return False
     g.user = user
     return True
 

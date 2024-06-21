@@ -1,14 +1,16 @@
+from flask import make_response, jsonify, g
 from app import auth
 from app.api import bp
 from app.api.models import Log
-import csv
 from io import StringIO
-from flask import make_response, jsonify
 from datetime import date
+from .auth.decorators import check_access
+import csv
 
 
 @bp.route("/v1/utils/export/logs", methods=["GET"])
 @auth.login_required
+@check_access(allowed_roles=["admin"])
 def export_logs():
     si = StringIO()
     cw = csv.writer(si)
@@ -25,5 +27,7 @@ def export_logs():
 
 @bp.route("/v1/utils/token", methods=["GET"])
 @auth.login_required
-def get_token():
-    return jsonify({"token": "Here is the token"})
+@check_access(allowed_roles=["admin", "user"])
+def get_auth_token():
+    token = g.user.generate_auth_token()
+    return jsonify({"token": token.decode("ascii")})

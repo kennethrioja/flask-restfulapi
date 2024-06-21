@@ -10,6 +10,11 @@ def bad_request(e):
     return make_response(jsonify({"error": "Bad Request"}), 400)
 
 
+@bp.app_errorhandler(403)
+def access_forbidden(e):
+    return make_response(jsonify({"message": "Access Forbidden"}), 403)
+
+
 @bp.app_errorhandler(404)
 def not_found(e):
     return make_response(jsonify({"error": "Not Found"}), 404)
