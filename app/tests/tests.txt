@@ -81,7 +81,7 @@ curl -u john:johnpwd -i -H "Content-Type: application/json" -X POST -d '{"userID
 curl -u john:johnpwd -i http://localhost:5000/tsadk/api/v1/utils/token
 
 ## POST logs
-curl -H "Authorization: Bearer t" -H "Content-Type: application/json" -X POST -d '{"userID": "1","timestamp": "002"}' -i http://localhost:5000/tsadk/api/v1/logs
+curl -u token:unused -i -H "Content-Type: application/json" -X POST -d '{"userID": "1","timestamp": "015"}' http://localhost:5000/tsadk/api/v1/logs
 
 # GET logs
 curl -u user1:pwd1 -i http://localhost:5000/tsadk/api/v1/logs

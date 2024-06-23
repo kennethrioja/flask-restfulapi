@@ -2,8 +2,9 @@ from flask import abort, jsonify, request, url_for
 from app import auth, db
 from app.api import bp
 from app.api.models import Log, User
-from app.api.errors import ERR_JSON, ERR_LOGS_KEYSYNTAX, ERR_LOGS_NFIELD, ERR_LOGS_INVALIDUSERID
+from app.api.errors import ERR_JSON, ERR_LOGS_KEYSYNTAX, ERR_LOGS_NFIELD, ERR_LOGS_NOUSERSFOUND, ERR_LOGS_INVALIDUSERID
 from .auth.decorators import check_access#, token_or_basic_auth_required
+import os
 
 
 # UTILS
@@ -42,13 +43,16 @@ def get_log(log_id):
 @bp.route("/v1/logs", methods=["POST"])
 @auth.login_required
 @check_access(allowed_roles=["admin"])
-# @token_or_basic_auth_required
 def create_log():
 
     userID = request.json["userID"]
     user = User.query.get(userID)
-    if user is None:
-        abort(400, description=ERR_LOGS_INVALIDUSERID)
+    if user is None:  # no users found
+        abort(400, description=ERR_LOGS_NOUSERSFOUND)
+    if auth.current_user() != os.environ.get("CLI_ID"):
+        usertoken = User.verify_auth_token(auth.current_user())
+        if user.id != usertoken.id:  # check token.id if it is the same than userID
+            abort(400, description=ERR_LOGS_INVALIDUSERID)
 
     timestamp = request.json["timestamp"]
 
