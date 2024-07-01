@@ -11,12 +11,13 @@ def unauthorized():
 
 @auth.verify_password
 def verify_password(username_or_token, password):
-    if username_or_token == os.environ.get("CLI_ID") and password == os.environ.get("CLI_PWD"):  # admin auth
+    if username_or_token == os.environ.get("CLI_ID") and \
+       password == os.environ.get("CLI_PWD"):  # verify admin
         return True
-    user = User.verify_auth_token(username_or_token)  # first try to authenticate by token
+    user = User.verify_auth_token(username_or_token)  # verify token
     if not user:
         user = User.query.filter_by(username=username_or_token).first()
-        if not user or not user.verify_password(password):  # user auth
+        if not user or not user.verify_password(password):  # verify user
             return False
     g.user = user
     return True
@@ -24,12 +25,9 @@ def verify_password(username_or_token, password):
 
 @auth.get_password
 def get_password(username):
-    """
-    In a more complex system this fun could check a user db
-    """
     if username == os.environ.get("CLI_ID"):
-        return os.environ.get("CLI_PWD")  # admin auth
+        return os.environ.get("CLI_PWD")  # admin pwd
     user = User.query.filter_by(username=username).first()
     if user:
-        return user.pwd_hash  # user auth
+        return user.pwd_hash  # user HASHEDpwd
     return None

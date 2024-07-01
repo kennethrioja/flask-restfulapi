@@ -72,16 +72,19 @@ curl -u pablo:pablopwd -i -H "Content-Type: application/json" -X POST -d '{"user
 curl -u user1:pwd1 -i http://localhost:5000/tsadk/api/v1/users
 
 # POST logs
-curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"userID": "10","timestamp": "010"}' http://localhost:5000/tsadk/api/v1/logs
+curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"userID": 2,"timestamp": "2023-04-18T10:17.109Z","sequence": 9,"roomName": "salleForet","actionNature": "mettre_main","actionType": "regionDeposer","userAnswer": "if(none){win}else{loose}","userError": "incorrect"}' http://localhost:5000/tsadk/api/v1/logs
 
 ## Access forbidden
-curl -u john:johnpwd -i -H "Content-Type: application/json" -X POST -d '{"userID": "1","timestamp": "002"}' http://localhost:5000/tsadk/api/v1/logs
+curl -u john:johnpwd -i -H "Content-Type: application/json" -X POST -d '{"userID": 2,"timestamp": "2023-04-18T10:17.109Z","sequence": 9,"roomName": "salleForet","actionNature": "mettre_main","actionType": "regionDeposer","userAnswer": "if(none){win}else{loose}","userError": "incorrect"}' http://localhost:5000/tsadk/api/v1/logs
 
 ## GET token
 curl -u john:johnpwd -i http://localhost:5000/tsadk/api/v1/utils/token
 
-## POST logs
-curl -u token:unused -i -H "Content-Type: application/json" -X POST -d '{"userID": "1","timestamp": "015"}' http://localhost:5000/tsadk/api/v1/logs
+## POST logs not allowed for another user
+curl -u token:unused -i -H "Content-Type: application/json" -X POST -d '{"userID": 2,"timestamp": "2023-04-18T10:17.109Z","sequence": 9,"roomName": "salleForet","actionNature": "mettre_main","actionType": "regionDeposer","userAnswer": "if(none){win}else{loose}","userError": "incorrect"}' http://localhost:5000/tsadk/api/v1/logs
+
+## POST logs ok
+curl -u token:unused -i -H "Content-Type: application/json" -X POST -d '{"userID": 1,"timestamp": "2023-04-18T10:17.109Z","sequence": 9,"roomName": "salleForet","actionNature": "mettre_main","actionType": "regionDeposer","userAnswer": "if(none){win}else{loose}","userError": "incorrect"}' http://localhost:5000/tsadk/api/v1/logs
 
 # GET logs
 curl -u user1:pwd1 -i http://localhost:5000/tsadk/api/v1/logs
