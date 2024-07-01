@@ -18,7 +18,7 @@ def create_app(config_class=Config):
     migrate.init_app(app, db, render_as_batch=True)
 
     from app.api import bp as api_bp
-    app.register_blueprint(api_bp, url_prefix="/tsadk/api")
+    app.register_blueprint(api_bp, url_prefix=f"/{Config.APP_NAME}/api")
 
     from app.api.errors import bp as errors_bp
     app.register_blueprint(errors_bp)

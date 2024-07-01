@@ -7,9 +7,11 @@ connection = sqlite3.connect("cache.db", timeout=10)
 
 
 class Config:
+    APP_NAME = os.environ.get("APP_NAME")
+
     SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL") or \
         "sqlite:///" + os.path.join(basedir, "app.db")
 
-    TOKEN_EXPIRATION_SEC = 60  # 60 * 60 * 24  # token expires in one day
+    TOKEN_EXPIRATION_SEC = int(os.environ.get("TOKEN_EXPIRATION_SEC"))
 
-    SECRET_KEY = 'hello'
+    SECRET_KEY = os.environ.get("SECRET_KEY")

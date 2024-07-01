@@ -6,7 +6,8 @@ from app.api.errors import bp
 @bp.app_errorhandler(400)
 def bad_request(e):
     if e:
-        return make_response(jsonify({"error": "Bad Request: " + e.description}), 400)
+        return make_response(jsonify({"error":
+                                      "Bad Request: " + e.description}), 400)
     return make_response(jsonify({"error": "Bad Request"}), 400)
 
 

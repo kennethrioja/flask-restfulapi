@@ -5,6 +5,7 @@ from app.api.models import Log
 from io import StringIO
 from datetime import date
 from .auth.decorators import check_access
+from config import Config
 import csv
 
 
@@ -14,14 +15,16 @@ import csv
 def export_logs():
     si = StringIO()
     cw = csv.writer(si)
-    records = Log.query.all()   # or a filtered set, of course
-    # any table method that extracts an iterable will work
-    cw.writerows([["id", "userID", "timestamp"]])
-    cw.writerows([(r.id, r.userID, r.timestamp) for r in records])
+    column_names = [column.name for column in Log.__table__.columns]
+    cw.writerow(column_names)
+    records = Log.query.all()
+    for record in records:
+        cw.writerow([getattr(record, column) for column in column_names])
     response = make_response(si.getvalue())
     today = str(date.today()).replace('-', '')
-    response.headers["Content-Disposition"] = f"attachment; filename=tsadk_export_logs_{today}.csv"
     response.headers["Content-type"] = "text/csv"
+    response.headers["Content-Disposition"] = f"attachment;\
+        filename={Config.APP_NAME}_export_logs_{today}.csv"
     return response
 
 

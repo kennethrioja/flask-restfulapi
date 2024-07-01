@@ -2,7 +2,8 @@ from typing import Optional
 from app import db
 from passlib.apps import custom_app_context as pwd_context
 from config import Config
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, \
+    BadSignature, SignatureExpired
 import sqlalchemy as sa
 import sqlalchemy.orm as so
 
@@ -14,8 +15,6 @@ class User(db.Model):
     pwd_hash: so.Mapped[str] = so.mapped_column(sa.String(128))
     role: so.Mapped[str] = so.mapped_column(sa.String(32),
                                             default=lambda: "user")
-    # email: so.Mapped[str] = so.mapped_column(sa.String(120), index=True,
-    #                                          unique=True)
 
     logs: so.WriteOnlyMapped["Log"] = so.relationship(back_populates="user")
 
@@ -51,14 +50,14 @@ class Log(db.Model):
     userID: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id),
                                               index=True)
     timestamp: so.Mapped[Optional[str]] = so.mapped_column(sa.String(64))
-    # sequence: so.Mapped[Optional[int]] = so.mapped_column(sa.Integer)
-    # roomName: so.Mapped[Optional[str]] = so.mapped_column(sa.String(32))
-    # actionNature: so.Mapped[Optional[str]] = so.mapped_column(sa.String(32))
-    # actionType: so.Mapped[Optional[str]] = so.mapped_column(sa.String(32))
-    # userAnswer: so.Mapped[Optional[str]] = so.mapped_column(sa.String(2048))
-    # userError: so.Mapped[Optional[str]] = so.mapped_column(sa.String(32))
+    sequence: so.Mapped[Optional[int]] = so.mapped_column(sa.Integer)
+    roomName: so.Mapped[Optional[str]] = so.mapped_column(sa.String(32))
+    actionNature: so.Mapped[Optional[str]] = so.mapped_column(sa.String(32))
+    actionType: so.Mapped[Optional[str]] = so.mapped_column(sa.String(32))
+    userAnswer: so.Mapped[Optional[str]] = so.mapped_column(sa.String(2048))
+    userError: so.Mapped[Optional[str]] = so.mapped_column(sa.String(32))
 
     user: so.Mapped[User] = so.relationship(back_populates="logs")
 
     def __repr__(self):
-        return "<Logs {}>".format(self.joueur)
+        return "<Logs {}>".format(self.user)
