@@ -5,7 +5,7 @@ from functools import wraps
 import os
 
 
-def check_access(allowed_roles):
+def check_access(allowed_roles, allow_token=False):
     """
     A decorator to check access permissions for routes based on user roles and
     authentication methods.
@@ -13,6 +13,9 @@ def check_access(allowed_roles):
     Args:
         allowed_roles (list): A list of roles allowed to access the decorated
         route.
+        allow_token (bool, optionnal): False by default, if set to True, any
+        authenticated user with a token can have access to the resource,
+        e.g., when POST /v1/logs.
 
     Returns:
         function: The wrapped function if access is permitted, otherwise
@@ -39,7 +42,7 @@ def check_access(allowed_roles):
             if auth.current_user() == os.environ.get("CLI_ID"):  # admin auth
                 return f(*args, **kwargs)
             user = User.verify_auth_token(auth.current_user())  # token auth
-            if user:
+            if user and allow_token:
                 return f(*args, **kwargs)
             user = User.query.filter_by(username=auth.current_user()).first()
             if user and user.role in allowed_roles:  # role-based ac

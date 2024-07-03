@@ -59,29 +59,7 @@ def get_log(log_id):
 
 @bp.route("/v1/logs", methods=["POST"])
 @auth.login_required
-@check_access(allowed_roles=["admin"])
-# def create_log():
-#     userID = request.json["userID"]
-#     user = User.query.get(userID)
-#     timestamp = request.json["timestamp"]
-
-#     if user is None:  # no users found
-#         abort(400, description=ERR_LOGS_NOUSERSFOUND)
-#     if auth.current_user() != os.environ.get("CLI_ID"):
-#         usertoken = User.verify_auth_token(auth.current_user())
-#         if user.id != usertoken.id:  # check token.id if it is the same than userID
-#             abort(400, description=ERR_LOGS_INVALIDUSERID)
-#     if not request.json:
-#         abort(400, description=ERR_JSON)
-#     if len(request.json) != 2:
-#         abort(400, description=ERR_LOGS_NFIELD)
-#     if len(request.json) == 2 and not ("userID" or "timestamp") in request.json:
-#         abort(400, description=ERR_LOGS_KEYSYNTAX)
-
-#     new_log = Log(userID=userID, timestamp=timestamp)
-#     db.session.add(new_log)
-#     db.session.commit()
-#     return jsonify({"id": new_log.id, "userID": new_log.userID, "timestamp": new_log.timestamp})
+@check_access(allowed_roles=["admin"], allow_token=True)
 def create_log():
     if not request.json:
         abort(400, description=ERR_JSON)

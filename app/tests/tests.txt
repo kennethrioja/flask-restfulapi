@@ -1,75 +1,17 @@
-// USERS
-
-//not auth
-curl -u user:pwd -i http://localhost:5000/tsadk/api/v1/users
-
-//ok
-curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"email":"c1@lol.co.uk","firstName":"c1","lastName":"lol"}' http://localhost:5000/tsadk/api/v1/users
-
-//not json object
-curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"email":"c1@lol.co.uk","firstName":"c1","lastName"}' http://localhost:5000/tsadk/api/v1/users
-
-//missing required fields
-curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"firstName":"c1","lastName":"lol"}' http://localhost:5000/tsadk/api/v1/users
-
-//incorrect key syntax
-curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"EMAIL":"c1@lol.co.uk","firstName":"c1","lastName":"lol"}' http://localhost:5000/tsadk/api/v1/users
-
-//not right email 1
-curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"email":"c1@lolcom","firstName":"c1","lastName":"lol"}' http://localhost:5000/tsadk/api/v1/users
-
-//not right email 2
-curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"email":"c1@..","firstName":"c1","lastName":"lol"}' http://localhost:5000/tsadk/api/v1/users
-
-//not right email 3
-curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"email":"..@lol.com","firstName":"c1","lastName":"lol"}' http://localhost:5000/tsadk/api/v1/users
-
-//wrong name len (must be >=2)
-curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"email":"c1@lol.co.uk","firstName":"c","lastName":"lo"}' http://localhost:5000/tsadk/api/v1/users
-
-// LOGS
-// get_logs
-curl -u user1:pwd1 -i http://localhost:5000/tsadk/api/v1/logs
-
-// get_log
-curl -u user1:pwd1 -i http://localhost:5000/tsadk/api/v1/logs/1
-
-// create_log
-curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"timestamp":"17-05-2024 11:14:00","nomSalle":"Cyclea","action":"Bend"}' http://localhost:5000/tsadk/api/v1/logs
-
-// miss reponse joueur
-curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"joueur": 26051990,
-    "timestamp": "2023-04-18T10:19.279Z",
-    "sequence": 10,
-    "nomSalle": "",
-    "action": "déconnexion",
-    "typeAction": "systeme",
-    "erreurJoueur": ""}' http://localhost:5000/tsadk/api/v1/logs
-
-// OK with timestamp
-curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"joueur": 26051990,"timestamp": "2023-04-18T10:19.279Z","sequence": 10,"nomSalle": "","action": "déconnexion","reponseJoueur":"","typeAction": "systeme","erreurJoueur": ""}' http://localhost:5000/tsadk/api/v1/logs
-
-// OK no timestamp
-curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"joueur": 26051990,"sequence": 10,"nomSalle": "","action": "déconnexion","reponseJoueur":"","typeAction": "systeme","erreurJoueur": ""}' http://localhost:5000/tsadk/api/v1/logs
-
-curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"joueur": 26051990,
-    "timestamp": "2023-04-18T10:17.109Z",
-    "sequence": 9,
-    "nomSalle": "salleForet",
-    "action": "mettre_main",
-    "typeAction": "regionDeposer",
-    "erreurJoueur": "incorrect"}' http://localhost:5000/tsadk/api/v1/logs
-
-//OK only sequence
-curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"joueur": 1,"action": "déconnexion"}' http://localhost:5000/tsadk/api/v1/logs
-
---------------------------------------
-# POST users
-curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"username": "john","pwd": "johnpwd"}' http://localhost:5000/tsadk/api/v1/users
-curl -u pablo:pablopwd -i -H "Content-Type: application/json" -X POST -d '{"username": "john","pwd": "johnpwd"}' http://localhost:5000/tsadk/api/v1/users
-
 # GET users
 curl -u user1:pwd1 -i http://localhost:5000/tsadk/api/v1/users
+
+# GET user 1
+curl -u user1:pwd1 -i http://localhost:5000/tsadk/api/v1/users/1
+
+# POST users
+curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"username": "bob","pwd": "bobpwd"}' http://localhost:5000/tsadk/api/v1/users
+
+# GET logs
+curl -u user1:pwd1 -i http://localhost:5000/tsadk/api/v1/logs
+
+# GET log 1
+curl -u user1:pwd1 -i http://localhost:5000/tsadk/api/v1/logs/1
 
 # POST logs
 curl -u user1:pwd1 -i -H "Content-Type: application/json" -X POST -d '{"userID": 2,"timestamp": "2023-04-18T10:17.109Z","sequence": 9,"roomName": "salleForet","actionNature": "mettre_main","actionType": "regionDeposer","userAnswer": "if(none){win}else{loose}","userError": "incorrect"}' http://localhost:5000/tsadk/api/v1/logs
@@ -86,31 +28,5 @@ curl -u token:unused -i -H "Content-Type: application/json" -X POST -d '{"userID
 ## POST logs ok
 curl -u token:unused -i -H "Content-Type: application/json" -X POST -d '{"userID": 1,"timestamp": "2023-04-18T10:17.109Z","sequence": 9,"roomName": "salleForet","actionNature": "mettre_main","actionType": "regionDeposer","userAnswer": "if(none){win}else{loose}","userError": "incorrect"}' http://localhost:5000/tsadk/api/v1/logs
 
-# GET logs
-curl -u user1:pwd1 -i http://localhost:5000/tsadk/api/v1/logs
-
 # GET report_logs
 curl -u user1:pwd1 -i http://localhost:5000/tsadk/api/v1/utils/export/logs
-
-
-
-# flask shell
-from app import db
-from app.api.models import User, Log
-import sqlalchemy as sa
-queryUser = sa.select(User)
-users = db.session.scalars(queryUser)
-app.app_context().push()
-
-# print
-for u in users:
-	print(u.id, u.username)
-
-# search
-for u in users:
-
-# len db
-len(db.session.scalars(queryUser).all())	
-
-# clear (does not make sense)
-db.session.scalars(query).all().clear()

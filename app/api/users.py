@@ -70,8 +70,6 @@ def create_user():
         abort(400, description=ERR_USERS_NAMELEN)  # username len too short
     if len(request.json) != 2:
         abort(400, description=ERR_USERS_NFIELD)  # not sure to keep
-    if len(request.json) == 2 and not ("username" or "pwd") in request.json:
-        abort(400, description=ERR_USERS_KEYSYNTAX)  # not sure to keep
     # if User.query.filter_by(username=username).first() is not None:
     #     abort(400, description="User with this username already exists")
     # if not re.match(
