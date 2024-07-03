@@ -37,6 +37,7 @@ flask-restfulapi/
 ```
 
 ## Quick Start
+- **Prerequisites**: Having installed `python3`
 - **Setup**:
     - `python3 -m venv venv`
     - `source venv/bin/activate`
