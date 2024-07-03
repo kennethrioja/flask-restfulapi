@@ -111,7 +111,7 @@ Endpoint prefix will always begin by your `<APP_NAME>`.
     - Returns an authentification token, to use for `/v1/logs` POST
 
 ## Table Fields
-- To create new or amend fields, modify the classes' fields under `models.py`
+- To create new or amend fields, modify the classes' fields under `models.py`, for example, you add : `newvar: so.Mapped[Optional[str]] = so.mapped_column(sa.String(128))`. Note: you max have ALTER TABLE errors, see https://blog.miguelgrinberg.com/post/fixing-alter-table-errors-with-flask-migrate-and-sqlite.
 - (Optional) Create the specific error handling under the python file of the class.
 - Run on the terminal `flask db migrate -m "<YOURCOMMENTHERE>"`, then `flask db upgrade`
 
