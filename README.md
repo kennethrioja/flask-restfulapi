@@ -37,7 +37,12 @@ flask-restfulapi/
 ```
 
 ## Quick Start
-- **Setup**: Run `python3 -m venv venv`, `source env/bin/activate`, then `pip install -r requirements.txt`. Configure environment by first `mv .envcopy .env` and change the .env variables.
+- **Setup**:
+    - `python3 -m venv venv`
+    - `source venv/bin/activate`
+    - `pip install --upgrade pip`
+    - `pip install --no-deps -r requirements.txt`.
+    - Configure environment by first `mv .envcopy .env` and change the .env variables.
 - **Run**: Run `flask run` to start the Flask server
 - **Test**: Use `curl` to test the API endpoints, e.g., `curl -u <CLI_ID>:<CLI_PWD> -i http://localhost:5000/<APP_NAME>/api/v1/users`. Note: CLI_ID, CLI_PWD and APP_NAME are the variables you have chosen in `.env` file, for example, if I have CLI_ID=123, CLI_PWD=456, APP_NAME=myapp, you should test with `curl -u 123:456 -i http://localhost:5000/myapp/api/v1/users`
 - **To reboot database**: Run `flask db downgrade base` then `flask db upgrade`
