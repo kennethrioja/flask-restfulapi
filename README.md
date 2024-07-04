@@ -45,6 +45,7 @@ flask-restfulapi/
 - **Run**: Run `flask run` to start the Flask server
 - **Test**: Use `curl` to test the API endpoints, e.g., `curl -u <CLI_ID>:<CLI_PWD> -i http://localhost:5000/<APP_NAME>/api/v1/users`. Note: CLI_ID, CLI_PWD and APP_NAME are the variables you have chosen in `.env` file, for example, if I have CLI_ID=123, CLI_PWD=456, APP_NAME=myapp, you should test with `curl -u 123:456 -i http://localhost:5000/myapp/api/v1/users`
 - **To reboot database**: Run `flask db downgrade base` then `flask db upgrade`
+- **To production server**: Run `gunicorn -b localhost:8000 app:app`
 
 ## Endpoints
 
