@@ -3,9 +3,7 @@
 ![Static Badge](https://img.shields.io/badge/python-3.12.4-blue?style=plastic&logo=python&logoColor=white&link=https%3A%2F%2Fwww.python.org%2F)
  ![Static Badge](https://img.shields.io/badge/flask-3.0.3-blue?style=plastic&logo=flask&link=https%3A%2F%2Fflask.palletsprojects.com%2Fen%2F3.0.x%2F) ![Static Badge](https://img.shields.io/badge/licence-GPL--3.0-blue?style=plastic&logo=gpl&logoColor=white&cacheSeconds=https%3A%2F%2Fwww.gnu.org%2Flicenses%2Fgpl-3.0.en.html) ![Static Badge](https://img.shields.io/badge/PEP8-passing-green?style=plastic&logo=pep8&logoColor=green&link=https%3A%2F%2Fpeps.python.org%2Fpep-0008%2F) 
 
-
-
-
+<img width="1089" alt="image" src="https://github.com/kennethrioja/flask-restfulapi/assets/59597207/a0b0c1e2-d9a2-45c7-9747-f9d8da0bc8f8">
 
 ## Overview
 
