@@ -34,3 +34,4 @@ def export_logs():
 def get_auth_token():
     token = g.user.generate_auth_token()
     return jsonify({"token": token.decode("ascii")})
+    # return jsonify({"userID": g.user.id, "token": token.decode("ascii")})
