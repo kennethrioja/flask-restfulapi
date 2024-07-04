@@ -1,5 +1,10 @@
 # flask-restfulapi
 
+![Static Badge](https://img.shields.io/badge/python-3.12.4-blue?style=plastic&logo=python&logoColor=white&link=https%3A%2F%2Fwww.python.org%2F)
+ ![Static Badge](https://img.shields.io/badge/flask-3.0.3-blue?style=plastic&logo=flask&link=https%3A%2F%2Fflask.palletsprojects.com%2Fen%2F3.0.x%2F) ![Static Badge](https://img.shields.io/badge/licence-GPL--3.0-blue?style=plastic&logo=gpl&logoColor=white&cacheSeconds=https%3A%2F%2Fwww.gnu.org%2Flicenses%2Fgpl-3.0.en.html) ![Static Badge](https://img.shields.io/badge/PEP8-passing-green?style=plastic&logo=pep8&logoColor=green&link=https%3A%2F%2Fpeps.python.org%2Fpep-0008%2F) 
+
+<img width="1084" alt="image" src="https://github.com/kennethrioja/flask-restfulapi/assets/59597207/6c0a40bd-1bcd-43fc-9c06-4e230f864b3b">
+
 ## Overview
 
 Using Flask (3.0.3) and SQLite, this RESTful API allows to receive and store logs. This has been done for the video game TSADK for the [Laboratoire d'Innovation Pédagogique](https://www.lip-unige.ch/).
@@ -30,7 +35,13 @@ flask-restfulapi/
 ```
 
 ## Quick Start
-- **Setup**: Run `python3 -m venv venv`, then `pip install -r requirements.txt`. Configure environment by first `mv .envcopy .env` and change the .env variables.
+- **Prerequisites**: Having installed `python3`
+- **Setup**:
+    - `python3 -m venv venv`
+    - `source venv/bin/activate`
+    - `pip install --upgrade pip`
+    - `pip install --no-deps -r requirements.txt`.
+    - Configure environment by first `mv .envcopy .env` and change the .env variables.
 - **Run**: Run `flask run` to start the Flask server
 - **Test**: Use `curl` to test the API endpoints, e.g., `curl -u <CLI_ID>:<CLI_PWD> -i http://localhost:5000/<APP_NAME>/api/v1/users`. Note: CLI_ID, CLI_PWD and APP_NAME are the variables you have chosen in `.env` file, for example, if I have CLI_ID=123, CLI_PWD=456, APP_NAME=myapp, you should test with `curl -u 123:456 -i http://localhost:5000/myapp/api/v1/users`
 - **To reboot database**: Run `flask db downgrade base` then `flask db upgrade`
@@ -98,7 +109,7 @@ Endpoint prefix will always begin by your `<APP_NAME>`.
     - Returns an authentification token, to use for `/v1/logs` POST
 
 ## Table Fields
-- To create new or amend fields, modify the classes' fields under `models.py`
+- To create new or amend fields, modify the classes' fields under `models.py`, for example, you add : `newvar: so.Mapped[Optional[str]] = so.mapped_column(sa.String(128))`. Note: you max have ALTER TABLE errors, see https://blog.miguelgrinberg.com/post/fixing-alter-table-errors-with-flask-migrate-and-sqlite.
 - (Optional) Create the specific error handling under the python file of the class.
 - Run on the terminal `flask db migrate -m "<YOURCOMMENTHERE>"`, then `flask db upgrade`
 
