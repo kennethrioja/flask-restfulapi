@@ -1,5 +1,6 @@
 # flask-restfulapi
 
+[![DOI](https://zenodo.org/badge/801407817.svg)](https://doi.org/10.5281/zenodo.16949432)
 ![Static Badge](https://img.shields.io/badge/python-3.12.4-blue?style=plastic&logo=python&logoColor=white&link=https%3A%2F%2Fwww.python.org%2F)
  ![Static Badge](https://img.shields.io/badge/flask-3.0.3-blue?style=plastic&logo=flask&link=https%3A%2F%2Fflask.palletsprojects.com%2Fen%2F3.0.x%2F) ![Static Badge](https://img.shields.io/badge/licence-GPL--3.0-blue?style=plastic&logo=gpl&logoColor=white&cacheSeconds=https%3A%2F%2Fwww.gnu.org%2Flicenses%2Fgpl-3.0.en.html) ![Static Badge](https://img.shields.io/badge/PEP8-passing-green?style=plastic&logo=pep8&logoColor=green&link=https%3A%2F%2Fpeps.python.org%2Fpep-0008%2F) 
 
